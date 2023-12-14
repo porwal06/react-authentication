@@ -1,4 +1,4 @@
-import { Form, Link, useSearchParams } from 'react-router-dom';
+import { Form, Link, useSearchParams, useActionData, useNavigation } from 'react-router-dom';
 
 import classes from './AuthForm.module.css';
 
@@ -7,10 +7,22 @@ function AuthForm() {
   let modeVal = searchParm.get('mode');
   let isLogin = modeVal === 'login' ? true : false;
 
+  const actionData = useActionData();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === 'submitting';
+
   return (
     <>
       <Form method="post" className={classes.form}>
         <h1>{isLogin ? 'Log in' : 'Create a new user'}</h1>
+        {actionData && actionData.errors && (
+          <ul>
+            {Object.values(actionData.errors).map(err => <li key={err}>{err}</li>)}
+          </ul>
+        )}
+        {actionData && actionData.message && (
+          <p>{actionData.message}</p>
+        )}
         <p>
           <label htmlFor="email">Email</label>
           <input id="email" type="email" name="email" required />
@@ -23,7 +35,7 @@ function AuthForm() {
           <Link to={!isLogin ? "?mode=login" : "?mode=signup"}>
             {isLogin ? 'Create new user' : 'Login'}
           </Link>
-          <button>Save</button>
+          <button disabled={isSubmitting}>{isSubmitting ? "Submitting..." : "Save"}</button>
         </div>
       </Form>
     </>
