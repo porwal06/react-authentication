@@ -1,10 +1,10 @@
-import { Link, useRouteError, useRouteLoaderData, useSubmit } from 'react-router-dom';
+import { Link, useRouteLoaderData, useSubmit } from 'react-router-dom';
 
 import classes from './EventItem.module.css';
 
 function EventItem({ event }) {
   const submit = useSubmit();
-  const token = useRouteLoaderData();
+  const token = useRouteLoaderData('root');
 
   function startDeleteHandler() {
     const proceed = window.confirm('Are you sure?');
