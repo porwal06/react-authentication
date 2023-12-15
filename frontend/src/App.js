@@ -6,8 +6,8 @@ import EventDetailPage, {
   loader as eventDetailLoader,
   action as deleteEventAction,
 } from './pages/EventDetail';
-import EventsPage, { loader as eventsLoader } from './pages/Events';
-import EventsRootLayout from './pages/EventsRoot';
+//import EventsPage, { loader as eventsLoader } from './pages/Events';
+//import EventsRootLayout from './pages/EventsRoot';
 import HomePage from './pages/Home';
 import NewEventPage from './pages/NewEvent';
 import RootLayout from './pages/Root';
@@ -16,6 +16,10 @@ import NewsletterPage, { action as newsletterAction } from './pages/Newsletter';
 import Authenticaion, {action as authAction} from './pages/Authentication';
 import { action as logoutAction } from './pages/Logout';
 import { checkLoader, tokenLoader } from './util/auth';
+import { Suspense, lazy } from 'react';
+
+const EventsPage = lazy(() => import('./pages/Events'));
+const EventsRootLayout = lazy(() => import('./pages/EventsRoot'));
 
 const router = createBrowserRouter([
   {
@@ -28,12 +32,12 @@ const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       {
         path: 'events',
-        element: <EventsRootLayout />,
+        element: <Suspense fallback={<p>Loading...</p>}><EventsRootLayout /></Suspense>,
         children: [
           {
             index: true,
-            element: <EventsPage />,
-            loader: eventsLoader,
+            element: <Suspense fallback={<p>Loading...</p>}><EventsPage /></Suspense>,
+            loader: () => import('./pages/Events').then((module) => module.loader()),
           },
           {
             path: ':eventId',
