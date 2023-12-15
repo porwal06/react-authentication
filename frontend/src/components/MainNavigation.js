@@ -5,7 +5,6 @@ import NewsletterSignup from './NewsletterSignup';
 
 function MainNavigation() {
   const token = useRouteLoaderData('root'); // This id we set in router file 
-  console.log(token);
   return (
     <header className={classes.header}>
       <nav>
